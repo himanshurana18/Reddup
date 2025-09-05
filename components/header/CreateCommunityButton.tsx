@@ -195,7 +195,7 @@ function CreateCommunityButton() {
                 title="Lowercase letters, numbers, and hyphens only"
               />
               <p className="text-xs text-gray-500">
-                This will be used in the URL: reddish.com/community/
+                This will be used in the URL: Reddup.com/community/
                 {slug || "community-slug"}
               </p>
             </div>
@@ -271,8 +271,8 @@ function CreateCommunityButton() {
               {isPending
                 ? "Creating..."
                 : user
-                  ? "Create Community"
-                  : "Sign in to create community"}
+                ? "Create Community"
+                : "Sign in to create community"}
             </Button>
           </form>
         </DialogHeader>

@@ -21,7 +21,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
-import ReddishLogo from "@/images/Reddish Full.png";
+import ReddishLogo from "@/images/reddup full.png";
 import Link from "next/link";
 import { getSubreddits } from "@/sanity/lib/subreddit/getSubreddits";
 import CreateCommunityButton from "./header/CreateCommunityButton";

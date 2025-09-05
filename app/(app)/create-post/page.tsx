@@ -10,7 +10,6 @@ async function CreatePostPage({
 }) {
   const { subreddit } = await searchParams;
 
-  // get all subreddits
   const subreddits = await getSubreddits();
 
   if (subreddit) {

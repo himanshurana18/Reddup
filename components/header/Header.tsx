@@ -2,8 +2,8 @@
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
-import ReddishLogo from "@/images/Reddish Full.png";
-import ReddishLogoOnly from "@/images/Reddish Logo Only.png";
+import ReddishLogo from "@/images/reddup full.png";
+import ReddishLogoOnly from "@/public/reddup-logo.png";
 import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import { useSidebar } from "../ui/sidebar";
@@ -31,8 +31,8 @@ function Header() {
             <Image
               src={ReddishLogoOnly}
               alt="logo"
-              width={40}
-              height={40}
+              width={90}
+              height={90}
               className="block md:hidden"
             />
           </div>
