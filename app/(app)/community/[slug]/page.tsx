@@ -79,13 +79,11 @@ interface PostType {
   _id: string;
 }
 
-type CommunityProps = {
-  params: {
-    slug: string;
-  };
-};
-
-export default async function CommunityPage({ params }: CommunityProps) {
+export default async function CommunityPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = params;
 
   const community = await getSubredditBySlug(slug);
