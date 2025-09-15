@@ -1,3 +1,73 @@
+// import Post from "@/components/post/Post";
+// import { urlFor } from "@/sanity/lib/image";
+// import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddit";
+// import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
+// import { currentUser } from "@clerk/nextjs/server";
+// import Image from "next/image";
+
+// async function CommunityPage({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }) {
+//   const { slug } = await params;
+
+//   const community = await getSubredditBySlug(slug);
+//   if (!community) return null;
+
+//   const user = await currentUser();
+//   const posts = await getPostsForSubreddit(community._id);
+
+//   return (
+//     <>
+//       {/* Community Banner */}
+//       <section className="bg-white border-b">
+//         <div className="mx-auto max-w-7xl px-4 py-6">
+//           <div className="flex items-center gap-4">
+//             {community?.image && community.image.asset?._ref && (
+//               <div className="relative h-16 w-16 overflow-hidden rounded-full border">
+//                 <Image
+//                   src={urlFor(community.image).url()}
+//                   alt={
+//                     community.image.alt || `${community.title} community icon`
+//                   }
+//                   fill
+//                   className="object-contain"
+//                   priority
+//                 />
+//               </div>
+//             )}
+//             <div>
+//               <h1 className="text-2xl font-bold">{community?.title}</h1>
+//               {community?.description && (
+//                 <p className="text-sm text-gray-600">{community.description}</p>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Posts */}
+//       <section className="my-8">
+//         <div className="mx-auto max-w-7xl px-4">
+//           <div className="flex flex-col gap-4">
+//             {posts.length > 0 ? (
+//               posts.map((post) => (
+//                 <Post key={post._id} post={post} userId={user?.id || null} />
+//               ))
+//             ) : (
+//               <div className="bg-white rounded-md p-6 text-center">
+//                 <p className="text-gray-500">No posts in this community yet.</p>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </section>
+//     </>
+//   );
+// }
+
+// export default CommunityPage;
 import Post from "@/components/post/Post";
 import { urlFor } from "@/sanity/lib/image";
 import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddit";
@@ -5,18 +75,22 @@ import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 
-async function CommunityPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+// Define the Post type (adjust fields according to your actual post schema)
+interface PostType {
+  _id: string;
+  title?: string;
+  content?: string;
+  // add other fields if needed
+}
+
+async function CommunityPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
 
   const community = await getSubredditBySlug(slug);
   if (!community) return null;
 
   const user = await currentUser();
-  const posts = await getPostsForSubreddit(community._id);
+  const posts: PostType[] = await getPostsForSubreddit(community._id);
 
   return (
     <>
@@ -52,7 +126,7 @@ async function CommunityPage({
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col gap-4">
             {posts.length > 0 ? (
-              posts.map((post) => (
+              posts.map((post: PostType) => (
                 <Post key={post._id} post={post} userId={user?.id || null} />
               ))
             ) : (
