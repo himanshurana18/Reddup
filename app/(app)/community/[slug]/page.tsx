@@ -74,28 +74,15 @@ import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddi
 import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
-import type { PostType } from "@/sanity/schemaTypes/postType";
 
-interface CommunityType {
-  _id: string;
-  title: string;
-  description?: string;
-  image?: { asset: { _ref: string }; alt?: string };
-}
-
-// ✅ App Router passes params as a plain object
-interface CommunityPageProps {
-  params: { slug: string };
-}
-
-async function CommunityPage({ params }: CommunityPageProps) {
+async function CommunityPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
 
-  const community: CommunityType | null = await getSubredditBySlug(slug);
+  const community = await getSubredditBySlug(slug);
   if (!community) return null;
 
   const user = await currentUser();
-  const posts: PostType[] = await getPostsForSubreddit(community._id);
+  const posts = await getPostsForSubreddit(community._id);
 
   return (
     <>
@@ -103,7 +90,7 @@ async function CommunityPage({ params }: CommunityPageProps) {
       <section className="bg-white border-b">
         <div className="mx-auto max-w-7xl px-4 py-6">
           <div className="flex items-center gap-4">
-            {community.image?.asset?._ref && (
+            {community?.image && community.image.asset?._ref && (
               <div className="relative h-16 w-16 overflow-hidden rounded-full border">
                 <Image
                   src={urlFor(community.image).url()}
@@ -117,8 +104,8 @@ async function CommunityPage({ params }: CommunityPageProps) {
               </div>
             )}
             <div>
-              <h1 className="text-2xl font-bold">{community.title}</h1>
-              {community.description && (
+              <h1 className="text-2xl font-bold">{community?.title}</h1>
+              {community?.description && (
                 <p className="text-sm text-gray-600">{community.description}</p>
               )}
             </div>
