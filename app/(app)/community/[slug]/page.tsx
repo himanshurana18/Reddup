@@ -83,6 +83,7 @@ interface CommunityType {
   image?: { asset: { _ref: string }; alt?: string };
 }
 
+// ✅ App Router passes params as a plain object
 interface CommunityPageProps {
   params: { slug: string };
 }
@@ -90,14 +91,10 @@ interface CommunityPageProps {
 async function CommunityPage({ params }: CommunityPageProps) {
   const { slug } = params;
 
-  // Fetch community data
   const community: CommunityType | null = await getSubredditBySlug(slug);
   if (!community) return null;
 
-  // Fetch user
   const user = await currentUser();
-
-  // Fetch posts
   const posts: PostType[] = await getPostsForSubreddit(community._id);
 
   return (
