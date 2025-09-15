@@ -74,8 +74,11 @@ import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddi
 import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
+type Props = {
+  params: { slug: string };
+};
 
-async function CommunityPage({ params }: { params: { slug: string } }) {
+export default async function CommunityPage({ params }: Props) {
   const { slug } = params;
 
   const community = await getSubredditBySlug(slug);
@@ -132,5 +135,3 @@ async function CommunityPage({ params }: { params: { slug: string } }) {
     </>
   );
 }
-
-export default CommunityPage;
