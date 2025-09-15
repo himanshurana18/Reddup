@@ -76,6 +76,33 @@ import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import type { FC } from "react";
 
+// Define the shape of the Post data
+interface PostType {
+  _id: string;
+  title: string;
+  content?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+    };
+    alt?: string;
+  };
+  // Add other fields as per your Sanity schema
+}
+
+// Define the shape of the Community data
+interface CommunityType {
+  _id: string;
+  title: string;
+  description?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+    };
+    alt?: string;
+  };
+}
+
 // Define the shape of the params prop
 interface CommunityPageProps {
   params: Promise<{ slug: string }>;
@@ -85,13 +112,13 @@ interface CommunityPageProps {
 const CommunityPage: FC<CommunityPageProps> = async ({ params }) => {
   const { slug } = await params;
 
-  const community = await getSubredditBySlug(slug);
+  const community: CommunityType | null = await getSubredditBySlug(slug);
   if (!community) {
     return null;
   }
 
   const user = await currentUser();
-  const posts = await getPostsForSubreddit(community._id);
+  const posts: PostType[] = await getPostsForSubreddit(community._id);
 
   return (
     <>
@@ -120,7 +147,6 @@ const CommunityPage: FC<CommunityPageProps> = async ({ params }) => {
             </div>
           </div>
         </div>
-        Boys & Girls Club of America{" "}
       </section>
 
       {/* Posts */}
@@ -128,7 +154,7 @@ const CommunityPage: FC<CommunityPageProps> = async ({ params }) => {
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col gap-4">
             {posts.length > 0 ? (
-              posts.map((post) => (
+              posts.map((post: PostType) => (
                 <Post key={post._id} post={post} userId={user?.id ?? null} />
               ))
             ) : (
