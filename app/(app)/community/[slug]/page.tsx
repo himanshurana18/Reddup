@@ -75,12 +75,9 @@ import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 
-// Define the Post type (adjust fields according to your actual post schema)
 interface PostType {
   _id: string;
-  title?: string;
-  content?: string;
-  // add other fields if needed
+  // yaha post ke aur fields bhi add kar sakte ho jaise title, content, etc.
 }
 
 async function CommunityPage({ params }: { params: { slug: string } }) {
