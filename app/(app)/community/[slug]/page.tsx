@@ -74,23 +74,24 @@ import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddi
 import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
+import type { FC } from "react";
 
-interface PostType {
-  _id: string;
+// Define the shape of the params prop
+interface CommunityPageProps {
+  params: Promise<{ slug: string }>;
 }
 
-export default async function CommunityPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
+// Use FC (Function Component) type for better TypeScript support
+const CommunityPage: FC<CommunityPageProps> = async ({ params }) => {
+  const { slug } = await params;
 
   const community = await getSubredditBySlug(slug);
-  if (!community) return null;
+  if (!community) {
+    return null;
+  }
 
   const user = await currentUser();
-  const posts: PostType[] = await getPostsForSubreddit(community._id);
+  const posts = await getPostsForSubreddit(community._id);
 
   return (
     <>
@@ -98,12 +99,12 @@ export default async function CommunityPage({
       <section className="bg-white border-b">
         <div className="mx-auto max-w-7xl px-4 py-6">
           <div className="flex items-center gap-4">
-            {community?.image && community.image.asset?._ref && (
+            {community.image?.asset?._ref && (
               <div className="relative h-16 w-16 overflow-hidden rounded-full border">
                 <Image
                   src={urlFor(community.image).url()}
                   alt={
-                    community.image.alt || `${community.title} community icon`
+                    community.image.alt ?? `${community.title} community icon`
                   }
                   fill
                   className="object-contain"
@@ -112,13 +113,14 @@ export default async function CommunityPage({
               </div>
             )}
             <div>
-              <h1 className="text-2xl font-bold">{community?.title}</h1>
-              {community?.description && (
+              <h1 className="text-2xl font-bold">{community.title}</h1>
+              {community.description && (
                 <p className="text-sm text-gray-600">{community.description}</p>
               )}
             </div>
           </div>
         </div>
+        Boys & Girls Club of America{" "}
       </section>
 
       {/* Posts */}
@@ -126,8 +128,8 @@ export default async function CommunityPage({
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col gap-4">
             {posts.length > 0 ? (
-              posts.map((post: PostType) => (
-                <Post key={post._id} post={post} userId={user?.id || null} />
+              posts.map((post) => (
+                <Post key={post._id} post={post} userId={user?.id ?? null} />
               ))
             ) : (
               <div className="bg-white rounded-md p-6 text-center">
@@ -139,4 +141,6 @@ export default async function CommunityPage({
       </section>
     </>
   );
-}
+};
+
+export default CommunityPage;
