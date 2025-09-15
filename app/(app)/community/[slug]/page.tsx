@@ -74,16 +74,7 @@ import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddi
 import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
-
-// Define a type for Post
-interface PostType {
-  _id: string;
-  title: string;
-  content: string;
-  image?: { asset: { _ref: string }; alt?: string };
-  createdAt: string;
-  authorId: string;
-}
+import type { PostType } from "@/sanity/schemaTypes/postType";
 
 interface CommunityType {
   _id: string;
@@ -92,17 +83,21 @@ interface CommunityType {
   image?: { asset: { _ref: string }; alt?: string };
 }
 
-async function CommunityPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+interface CommunityPageProps {
+  params: { slug: string };
+}
 
+async function CommunityPage({ params }: CommunityPageProps) {
+  const { slug } = params;
+
+  // Fetch community data
   const community: CommunityType | null = await getSubredditBySlug(slug);
   if (!community) return null;
 
+  // Fetch user
   const user = await currentUser();
+
+  // Fetch posts
   const posts: PostType[] = await getPostsForSubreddit(community._id);
 
   return (
@@ -139,7 +134,7 @@ async function CommunityPage({
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col gap-4">
             {posts.length > 0 ? (
-              posts.map((post: PostType) => (
+              posts.map((post) => (
                 <Post key={post._id} post={post} userId={user?.id || null} />
               ))
             ) : (
