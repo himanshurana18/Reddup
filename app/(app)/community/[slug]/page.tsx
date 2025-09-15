@@ -76,18 +76,68 @@ import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import type { FC } from "react";
 
-// Define the shape of the Post data
-interface PostType {
+// Define the shape of the Author data
+interface AuthorType {
   _id: string;
-  title: string;
-  content?: string;
+  _type: "user";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  username?: string;
   image?: {
     asset?: {
       _ref: string;
     };
     alt?: string;
   };
-  // Add other fields as per your Sanity schema
+  isReported?: boolean;
+}
+
+// Define the shape of the Block Content (for body)
+interface BlockContent {
+  _key: string;
+  _type: string;
+  style?:
+    | "normal"
+    | "blockquote"
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "bullet"
+    | "number";
+  children?: Array<{
+    _key: string;
+    _type: "span";
+    text?: string;
+    marks?: string[];
+  }>;
+}
+
+// Define the shape of the Post data
+interface PostType {
+  _id: string;
+  _type: "post";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  originalTitle?: string;
+  author: AuthorType | null;
+  slug?: {
+    current?: string;
+  } | null;
+  body?: BlockContent[] | null;
+  image?: {
+    asset?: {
+      _ref: string;
+    };
+    alt?: string;
+  };
+  isDeleted?: boolean;
+  commentCount: number;
 }
 
 // Define the shape of the Community data
