@@ -77,10 +77,15 @@ import Image from "next/image";
 
 interface PostType {
   _id: string;
-  // yaha post ke aur fields bhi add kar sakte ho jaise title, content, etc.
 }
 
-async function CommunityPage({ params }: { params: { slug: string } }) {
+type CommunityPageProps = {
+  params: {
+    slug: string;
+  };
+};
+
+export default async function CommunityPage({ params }: CommunityPageProps) {
   const { slug } = params;
 
   const community = await getSubredditBySlug(slug);
@@ -137,5 +142,3 @@ async function CommunityPage({ params }: { params: { slug: string } }) {
     </>
   );
 }
-
-export default CommunityPage;
