@@ -28,7 +28,6 @@
 //     </>
 //   );
 // }
-import PostsList from "@/components/post/PostsList";
 
 import React from "react";
 
