@@ -135,6 +135,7 @@
 //     </>
 //   );
 // }
+import React from "react";
 import Post from "@/components/post/Post";
 import { urlFor } from "@/sanity/lib/image";
 import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddit";
@@ -147,10 +148,9 @@ import Image from "next/image";
 type Props = {
   params: { slug: string };
 };
-
 export default async function CommunityPage({
   params,
-}: Props): Promise<JSX.Element | null> {
+}: Props): Promise<React.JSX.Element | null> {
   const { slug } = params;
 
   const community = await getSubredditBySlug(slug);
